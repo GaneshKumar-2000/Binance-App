@@ -1,0 +1,23 @@
+.login {
+    background: rgb(239, 238, 238);
+    color: white;
+    height: calc(100vh - 0px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    height: 6vh;
+}
+
+.login .login-main .user-details {
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login .login-main .user-details button {
+    background: rgb(113, 177, 255);
+    color: #000;
+    font-weight: 700;
+}

@@ -1,0 +1,48 @@
+.options-view {
+    margin-block: 4%;
+}
+
+.options-view .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.table-view .options-view .filter,
+.table-view .options-view .span {
+    text-align: center;
+}
+
+.table-view .options-view .filter span,
+.table-view .options-view .sort span {
+    background: #dfacfb;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.table-data .sort-status {
+    float: right;
+    margin-inline-end: 30px;
+}
+
+.time-filter {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.limit {
+    margin-block-start: 20px;
+}
+
+.sort-options {
+    width: 20%;
+    text-align: center;
+    padding: 2%;
+    background: #000;
+    color: #fff;
+    border-radius: 30px;
+    cursor: pointer;
+}

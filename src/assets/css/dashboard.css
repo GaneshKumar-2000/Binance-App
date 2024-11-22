@@ -1,0 +1,19 @@
+.dashboard {
+    /* height: 100vh; */
+    overflow: hidden;
+}
+
+#logout-button {
+    background-color: rgb(255, 91, 91);
+    color: #fff;
+    font-weight: 700;
+}
+
+.nav-pills {
+    height: 100vh;
+    background-color: rgb(235, 235, 235);
+}
+
+.nav-pills .nav-item:last-child {
+    margin: auto auto 15% 35%;
+}
