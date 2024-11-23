@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
   const [isSorted, setIsSorted] = useState(false);
 
   //datepicker States 
-  const start = localStorage.getItem("startDate") ? new Date(Number(localStorage.getItem("startDate"))) : new Date();
+  const start = new Date(Number(localStorage.getItem("startDate")));
   const end = localStorage.getItem("endDate") ? new Date(Number(localStorage.getItem("endDate"))) : new Date();
 
   const [startDateTemp, setStartDateTemp] = useState(start);
@@ -92,6 +92,20 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
   const updateSort = () => {
     dispatch(setSorted(isSorted))
   }
+
+  useEffect(() => {
+    const storedStartDate = localStorage.getItem("startDate");
+    const storedEndDate = localStorage.getItem("endDate");
+
+    if (storedStartDate) {
+      setStartDateTemp(new Date(Number(storedStartDate)));
+    }
+
+    if (storedEndDate) {
+      setEndDateTemp(new Date(Number(storedEndDate)));
+    }
+  }, []);
+
 
   return (
     <div className='table-view'>

@@ -1,13 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const date = new Date();
-const StartTime = new Date(date);
-StartTime.setDate(date.getDate() - 1);
 
 const initialState = {
     tableTicker: localStorage.getItem("tableTicker") ? localStorage.getItem("tableTicker") : "BTCUSDT",
     tableTime: localStorage.getItem("tableTime") ? localStorage.getItem("tableTime") : "1m",
-    startDate: localStorage.getItem("startDate") ? Number(localStorage.getItem("startDate")) : StartTime.getTime(),
+    startDate: localStorage.getItem("startDate") ? Number(localStorage.getItem("startDate")) : date.getTime() - 86400000,
     endDate: localStorage.getItem("endDate") ? Number(localStorage.getItem("endDate")) : date.getTime(),
     limit: localStorage.getItem("limit") ? Number(localStorage.getItem("limit")) : 50,
     sort: localStorage.getItem("sort") ? localStorage.getItem("sort") : false,

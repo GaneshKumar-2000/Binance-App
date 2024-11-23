@@ -20,12 +20,20 @@ const authStore = createSlice({
             localStorage.setItem('isLogged', "true");
             localStorage.setItem('tab', "chart");
             localStorage.setItem('sort', "false");
+            localStorage.setItem("startDate", new Date().getTime() - 86400000)
         },
         logout(state) {
             state.isLogged = false;
             state.user = null;
             state.token = null;
             localStorage.clear()
+            localStorage.removeItem("startDate");
+            localStorage.removeItem("endDate");
+            localStorage.removeItem("tableTicker");
+            localStorage.removeItem("tableTime");
+            localStorage.removeItem("limit");
+            localStorage.removeItem("sort");
+
         },
     },
 });
