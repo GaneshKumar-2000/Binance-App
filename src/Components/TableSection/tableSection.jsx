@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTableTicker, setTableTime, setStartDate, setEndDate, setLimit } from '../../redux/tableStore/tableStore';
+import { setTableTicker, setTableTime, setStartDate, setEndDate, setLimit, setSorted } from '../../redux/tableStore/tableStore';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DatePicker from 'react-datepicker';
@@ -15,8 +15,11 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
   const [isSorted, setIsSorted] = useState(false);
 
   //datepicker States 
-  const [startDateTemp, setStartDateTemp] = useState(new Date());
-  const [endDateTemp, setEndDateTemp] = useState(new Date());
+  const start = localStorage.getItem("startDate") ? new Date(Number(localStorage.getItem("startDate"))) : new Date();
+  const end = localStorage.getItem("endDate") ? new Date(Number(localStorage.getItem("endDate"))) : new Date();
+
+  const [startDateTemp, setStartDateTemp] = useState(start);
+  const [endDateTemp, setEndDateTemp] = useState(end);
 
   //This is to map only the values that are needed for table data
   const tableList = tableData.map((value) => ({
@@ -86,6 +89,10 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
 
   const sortedData = isSorted ? [...tableList].sort((a, b) => a.time - b.time) : [...tableList].sort((a, b) => b.time - a.time);
 
+  const updateSort = () => {
+    dispatch(setSorted(isSorted))
+  }
+
   return (
     <div className='table-view'>
       <div className='table-navbar'>
@@ -130,7 +137,7 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
         <DataTable
           title={`OHLCV for ${tableTicker}`}
           columns={columns}
-          data={sortedData}
+          data={sortedData || []}
           customStyles={customStyles}
           pagination
           paginationPerPage={itemsPerPage}
@@ -195,7 +202,7 @@ const TableSection = ({ tableData, tickerList, applyFilter }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className='sort-options' onClick={() => { setIsSorted((status) => !status); setSortShow((status) => !status) }}>{isSorted ? "Sort Descending" : "Sort Ascending"}</div>
+          <div className='sort-options' onClick={() => { setIsSorted((status) => !status); setSortShow((status) => !status); updateSort }}>{isSorted ? "Sort Descending" : "Sort Ascending"}</div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setSortShow((status) => !status)}>Close</Button>

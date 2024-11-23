@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const date = new Date();
+const StartTime = new Date(date);
+StartTime.setDate(date.getDate() - 1);
+
 const initialState = {
     tableTicker: localStorage.getItem("tableTicker") ? localStorage.getItem("tableTicker") : "BTCUSDT",
     tableTime: localStorage.getItem("tableTime") ? localStorage.getItem("tableTime") : "1m",
-    startDate: localStorage.getItem("startDate") ? Number(localStorage.getItem("startDate")) : date.getTime(),
+    startDate: localStorage.getItem("startDate") ? Number(localStorage.getItem("startDate")) : StartTime.getTime(),
     endDate: localStorage.getItem("endDate") ? Number(localStorage.getItem("endDate")) : date.getTime(),
     limit: localStorage.getItem("limit") ? Number(localStorage.getItem("limit")) : 50,
+    sort: localStorage.getItem("sort") ? localStorage.getItem("sort") : false,
 };
 
 const tableStore = createSlice({
@@ -32,9 +36,13 @@ const tableStore = createSlice({
         setLimit(state, action) {
             state.limit = action.payload
             localStorage.setItem("limit", action.payload)
+        },
+        setSorted(state, action) {
+            state.sort = action.payload;
+            localStorage.setItem("sort", action.payload);
         }
     },
 });
 
-export const { setTableTicker, setTableTime, setStartDate, setEndDate, setLimit } = tableStore.actions;
+export const { setTableTicker, setTableTime, setStartDate, setEndDate, setLimit, setSorted } = tableStore.actions;
 export default tableStore.reducer;

@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 import { useSelector, useDispatch } from 'react-redux';
-import Dashboard from './Layouts/Dashboard/dashboard';
 import { login } from './redux/authStore/authStore';
-
-
-import Login from './Layouts/Login/Login';
+const Dashboard = React.lazy(() => import('./Layouts/Dashboard/dashboard'))
+const Login = React.lazy(() => import('./Layouts/Login/Login'))
 
 function App() {
   const dispatch = useDispatch();
@@ -22,18 +20,19 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {!isLogged ?
-          <Route path="/" element={<Login />} />
-          :
-          <Route
-            path="/"
-            element={
-              <Dashboard />
-            }
-          />}
+      <Suspense fallback={<div>Loading.....</div>}>
+        <Routes>
+          {!isLogged ?
+            <Route path="/" element={<Login />} />
+            :
+            <Route
+              path="/"
+              element={
+                <Dashboard />
+              }
+            />}
 
-        {/* <Route
+          {/* <Route
           path="/table"
           element={
             <PrivateRoute>
@@ -41,7 +40,8 @@ function App() {
             </PrivateRoute>
           }
         /> */}
-      </Routes>
+        </Routes>
+      </Suspense>
     </Router>
 
   )

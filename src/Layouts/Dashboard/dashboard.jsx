@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
@@ -22,7 +22,6 @@ const Dashboard = () => {
     const { tableTicker, tableTime, startDate, endDate, limit } = useSelector(state => state.table);
 
     const logoutUser = () => {
-        const date = new Date();
         const response = confirm("Do you really want to Logout ?");
         if (response) {
             dispatch(logout())
@@ -30,8 +29,8 @@ const Dashboard = () => {
             dispatch(setTime("1m"))
             dispatch(setTableTicker("BTCUSDT"))
             dispatch(setTableTime("1m"))
-            dispatch(setStartDate(date.getTime()))
-            dispatch(setEndDate(date.getTime()))
+            dispatch(setStartDate(new Date().getTime() - 86400000));
+            dispatch(setEndDate(new Date().getTime()));
         }
     }
 
@@ -55,7 +54,7 @@ const Dashboard = () => {
         const liveDataFetch = setInterval(fetchBinanceAPITable, 10000);
 
         return () => clearInterval(liveDataFetch)
-    }, [tableTicker, tableTime])
+    }, [tableTicker, tableTime, startDate, endDate, limit])
 
     const fetchBinanceAPIChart = () => {
         const url = `https://api1.binance.com/api/v1/klines?symbol=${ticker}&interval=${time}`;
@@ -65,7 +64,7 @@ const Dashboard = () => {
     }
 
     const fetchBinanceAPITable = () => {
-        const url = `https://api1.binance.com/api/v1/klines?symbol=${tableTicker}&interval=${tableTime}&startTime=${startDate}&endTime=${endDate}`;
+        const url = `https://api1.binance.com/api/v1/klines?symbol=${tableTicker}&interval=${tableTime}&limit=${limit}&startTime=${startDate}&endTime=${endDate}`;
         GetAPI(url, (response) => {
             settableData(response)
         })
@@ -82,24 +81,24 @@ const Dashboard = () => {
         })
     }
 
-    const activeTab = localStorage.getItem("tab") ? localStorage.getItem("tab") : "chart"
+    const activeTab = localStorage.getItem("tab");
 
-    const updateActiveTab = (key) => {
+    const updateTab = (key) => {
         localStorage.setItem("tab", key)
     }
 
     return (
         <div className='dashboard'>
             <div>
-                <Tab.Container defaultActiveKey={activeTab} onSelect={updateActiveTab}>
+                <Tab.Container activeKey={activeTab} onSelect={updateTab}>
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className="flex-column">
                                 <Nav.Item>
-                                    <Nav.Link eventKey="first">Chart View</Nav.Link>
+                                    <Nav.Link eventKey="chart">Chart View</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link eventKey="second">Table View</Nav.Link>
+                                    <Nav.Link eventKey="table">Table View</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <button type="button" className="btn" id='logout-button' onClick={logoutUser}>Logout</button>
@@ -108,8 +107,8 @@ const Dashboard = () => {
                         </Col>
                         <Col sm={9}>
                             <Tab.Content>
-                                <Tab.Pane eventKey="first"><ChartSection chartData={chartData} tickerList={tickerList} /></Tab.Pane>
-                                <Tab.Pane eventKey="second"><TableSection tableData={tableData} tickerList={tickerList} applyFilter={fetchBinanceAPITable} /></Tab.Pane>
+                                <Tab.Pane eventKey="chart"><ChartSection chartData={chartData} tickerList={tickerList} /></Tab.Pane>
+                                <Tab.Pane eventKey="table"><TableSection tableData={tableData} tickerList={tickerList} applyFilter={fetchBinanceAPITable} /></Tab.Pane>
                             </Tab.Content>
                         </Col>
                     </Row>

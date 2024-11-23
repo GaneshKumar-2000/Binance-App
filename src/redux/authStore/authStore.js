@@ -18,16 +18,14 @@ const authStore = createSlice({
             localStorage.setItem('token', token);
             localStorage.setItem('usermail', email);
             localStorage.setItem('isLogged', "true");
+            localStorage.setItem('tab', "chart");
+            localStorage.setItem('sort', "false");
         },
         logout(state) {
             state.isLogged = false;
             state.user = null;
             state.token = null;
-            localStorage.removeItem('token');
-            localStorage.removeItem('usermail');
-            localStorage.removeItem('isLogged');
-            localStorage.removeItem("ticker");
-            localStorage.removeItem("time");
+            localStorage.clear()
         },
     },
 });
