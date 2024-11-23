@@ -54,7 +54,7 @@ const Dashboard = () => {
         const liveDataFetch = setInterval(fetchBinanceAPITable, 10000);
 
         return () => clearInterval(liveDataFetch)
-    }, [tableTicker, tableTime, startDate, endDate, limit])
+    }, [tableTicker, tableTime])
 
     const fetchBinanceAPIChart = () => {
         const url = `https://api1.binance.com/api/v1/klines?symbol=${ticker}&interval=${time}`;
@@ -64,7 +64,7 @@ const Dashboard = () => {
     }
 
     const fetchBinanceAPITable = () => {
-        const url = `https://api1.binance.com/api/v1/klines?symbol=${tableTicker}&interval=${tableTime}&limit=${limit}&startTime=${startDate}&endTime=${endDate}`;
+        const url = `https://api1.binance.com/api/v1/klines?symbol=${tableTicker}&interval=${tableTime}&limit=${limit == 0 ? '50' : limit}&startTime=${startDate}&endTime=${endDate}`;
         GetAPI(url, (response) => {
             settableData(response)
         })
@@ -90,7 +90,7 @@ const Dashboard = () => {
     return (
         <div className='dashboard'>
             <div>
-                <Tab.Container activeKey={activeTab} onSelect={updateTab}>
+                <Tab.Container defaultActiveKey={activeTab} onSelect={updateTab}>
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className="flex-column">
